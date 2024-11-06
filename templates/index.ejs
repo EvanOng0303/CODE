@@ -1,0 +1,216 @@
+<html>
+<head>
+    <title>记事本应用</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&amp;display=swap" rel="stylesheet"/>
+    <style>
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+        }
+        .thumbnail {
+            max-width: 200px;
+            max-height: 150px;
+            cursor: pointer;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
+        }
+        .modal-content {
+            margin: 15% auto;
+            display: block;
+            max-width: 80%;
+        }
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <header class="flex justify-between items-center py-4">
+            <h1 class="text-3xl font-bold">记事本应用</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="text-blue-500 hover:underline" href="#">首页</a></li>
+                    <li><a class="text-blue-500 hover:underline" href="#">关于</a></li>
+                    <li><a class="text-blue-500 hover:underline" href="#">联系</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold mb-4">上传新记事</h2>
+                <form class="bg-white p-6 rounded shadow-md" action="/upload" method="POST" enctype="multipart/form-data">
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="title">标题</label>
+                        <input class="w-full p-2 border border-gray-300 rounded mt-1" id="title" name="title" type="text" required/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="image">图片</label>
+                        <input class="w-full p-2 border border-gray-300 rounded mt-1" id="image" name="image" type="file" accept="image/*"/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="video">影片</label>
+                        <input class="w-full p-2 border border-gray-300 rounded mt-1" id="video" name="video" type="file" accept="video/*"/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="document">文档</label>
+                        <input class="w-full p-2 border border-gray-300 rounded mt-1" id="document" name="document" type="file" accept=".pdf,.doc,.docx,.txt"/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="content">内容</label>
+                        <textarea class="w-full p-2 border border-gray-300 rounded mt-1" id="content" name="content" rows="4" required></textarea>
+                    </div>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit">上传</button>
+                </form>
+            </section>
+            <section>
+                <h2 class="text-2xl font-bold mb-4">记事列表</h2>
+                <button class="bg-red-500 text-white px-4 py-2 rounded mb-4" id="delete-all">全部删除</button>
+                <div class="space-y-4" id="notes-list">
+                    <!-- 使用 EJS 循环渲染记事列表 -->
+                    <% notes.forEach(note => { %>
+                        <div class="bg-white p-6 rounded shadow-md" data-id="<%= note.id %>">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-xl font-bold"><%= note.title %></h3>
+                                <button class="text-red-500 hover:text-red-700 delete-note">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+                            <p class="text-gray-600 mb-2">上传时间: <%= note.upload_time %></p>
+                            <% if (note.image) { %>
+                                <img alt="描述详细的图片内容" class="thumbnail mb-4" src="<%= note.image %>" onclick="openModal(this)"/>
+                            <% } %>
+                            <% if (note.video) { %>
+                                <video class="thumbnail mb-4" controls onclick="openModal(this)">
+                                    <source src="<%= note.video %>" type="video/mp4"/>
+                                    您的浏览器不支持 HTML5 视频。
+                                </video>
+                            <% } %>
+                            <% if (note.document) { %>
+                                <a class="text-blue-500 hover:underline mb-4 block" href="<%= note.document %>" download>下载文档</a>
+                            <% } %>
+                            <p class="text-gray-700"><%= note.content %></p>
+                        </div>
+                    <% }) %>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for image and video -->
+    <div id="modal" class="modal">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <img class="modal-content" id="modal-image">
+        <video class="modal-content" id="modal-video" controls></video>
+    </div>
+
+    <script>
+        // 删除单个记事
+        function deleteNote(element) {
+            const noteDiv = element.closest('.bg-white');
+            const noteId = noteDiv.getAttribute('data-id');
+
+            fetch(`/delete/${noteId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    noteDiv.remove();
+                } else {
+                    alert('删除失败');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('删除时发生错误');
+            });
+        }
+
+        // 删除所有记事
+        document.getElementById('delete-all').addEventListener('click', function() {
+            if (confirm('您确定要删除所有记事吗？')) {
+                fetch('/delete_all', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'success') {
+                        document.getElementById('notes-list').innerHTML = '';
+                    } else {
+                        alert('删除失败');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('删除时发生错误');
+                });
+            }
+        });
+
+        // 绑定删除按钮事件
+        document.querySelectorAll('.delete-note').forEach(function(button) {
+            button.addEventListener('click', function() {
+                deleteNote(this);
+            });
+        });
+
+        // 打开图片或视频的模态窗口
+        function openModal(element) {
+            const modal = document.getElementById('modal');
+            const modalImage = document.getElementById('modal-image');
+            const modalVideo = document.getElementById('modal-video');
+
+            if (element.tagName === 'IMG') {
+                modalImage.src = element.src;
+                modalImage.style.display = 'block';
+                modalVideo.style.display = 'none';
+            } else if (element.tagName === 'VIDEO') {
+                modalVideo.src = element.querySelector('source').src;
+                modalVideo.style.display = 'block';
+                modalImage.style.display = 'none';
+            }
+
+            modal.style.display = 'block';
+        }
+
+        // 关闭模态窗口
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            modal.style.display = 'none';
+        }
+
+        // 点击模态窗口外部关闭模态窗口
+        window.onclick = function(event) {
+            const modal = document.getElementById('modal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
