@@ -47,9 +47,9 @@ uploadFolders.forEach(folder => {
 });
 
 // 连接到 MongoDB（在此处替换为 MongoDB Atlas URI 或其他远程数据库）
-mongoose.connect('your_remote_mongodb_uri')
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('MongoDB connection error:', err));
+//mongoose.connect('your_remote_mongodb_uri')
+ //   .then(() => console.log('Connected to MongoDB'))
+ //   .catch(err => console.error('MongoDB connection error:', err));
 
 // 定义记事 Schema 和模型
 const noteSchema = new mongoose.Schema({
