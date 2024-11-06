@@ -1,12 +1,15 @@
+// 引入所需模块
 const express = require('express');
+const mongoose = require('mongoose');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
 
+// 创建 Express 应用
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// 设置 EJS 作为模板引擎
+// 设置 EJS 模板引擎
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'templates'));
 
@@ -14,6 +17,29 @@ app.set('views', path.join(__dirname, 'templates'));
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
+// 配置 MongoDB 连接
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
+    console.log('Connected to MongoDB Atlas');
+})
+.catch(err => {
+    console.error('MongoDB connection error:', err);
+});
+
+// 定义一个简单的 Schema 和模型（例如，记事）
+const noteSchema = new mongoose.Schema({
+    title: String,
+    content: String,
+    image: String,
+    video: String,
+    document: String,
+    upload_time: String
+});
+const Note = mongoose.model('Note', noteSchema);
 
 // 配置 Multer 存储
 const storage = multer.diskStorage({
@@ -33,7 +59,6 @@ const storage = multer.diskStorage({
         cb(null, uniqueSuffix);
     }
 });
-
 const upload = multer({ storage: storage });
 
 // 确保上传文件夹存在
@@ -44,34 +69,6 @@ uploadFolders.forEach(folder => {
         fs.mkdirSync(dir, { recursive: true });
     }
 });
-
-const mongoose = require('mongoose');
-
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => {
-    console.log('Connected to MongoDB Atlas');
-})
-.catch(err => {
-    console.error('MongoDB connection error:', err);
-});
-
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
-
-// 定义记事 Schema 和模型
-const noteSchema = new mongoose.Schema({
-    title: String,
-    content: String,
-    image: String,
-    video: String,
-    document: String,
-    upload_time: String
-});
-
-const Note = mongoose.model('Note', noteSchema);
 
 // 渲染主页
 app.get('/', async (req, res) => {
@@ -85,7 +82,7 @@ app.get('/', async (req, res) => {
     res.render('index', { notes });
 });
 
-// 处理上传
+// 上传新记事
 app.post('/upload', upload.fields([
     { name: 'image', maxCount: 1 },
     { name: 'video', maxCount: 1 },
@@ -120,22 +117,9 @@ app.post('/delete/:id', async (req, res) => {
     try {
         const note = await Note.findById(id);
         if (note) {
-            if (note.image) {
-                fs.unlink(path.join(__dirname, 'static', note.image), err => {
-                    if (err) console.error(err);
-                });
-            }
-            if (note.video) {
-                fs.unlink(path.join(__dirname, 'static', note.video), err => {
-                    if (err) console.error(err);
-                });
-            }
-            if (note.document) {
-                fs.unlink(path.join(__dirname, 'static', note.document), err => {
-                    if (err) console.error(err);
-                });
-            }
-
+            if (note.image) fs.unlinkSync(path.join(__dirname, 'static', note.image));
+            if (note.video) fs.unlinkSync(path.join(__dirname, 'static', note.video));
+            if (note.document) fs.unlinkSync(path.join(__dirname, 'static', note.document));
             await Note.findByIdAndDelete(id);
             res.json({ status: 'success' });
         } else {
@@ -145,42 +129,6 @@ app.post('/delete/:id', async (req, res) => {
         console.error(err);
         res.status(500).json({ status: 'failure', message: 'Server error' });
     }
-});
-
-// 删除所有记事
-app.post('/delete_all', async (req, res) => {
-    try {
-        const allNotes = await Note.find();
-        allNotes.forEach(note => {
-            if (note.image) {
-                fs.unlink(path.join(__dirname, 'static', note.image), err => {
-                    if (err) console.error(err);
-                });
-            }
-            if (note.video) {
-                fs.unlink(path.join(__dirname, 'static', note.video), err => {
-                    if (err) console.error(err);
-                });
-            }
-            if (note.document) {
-                fs.unlink(path.join(__dirname, 'static', note.document), err => {
-                    if (err) console.error(err);
-                });
-            }
-        });
-
-        await Note.deleteMany({});
-        res.json({ status: 'success' });
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ status: 'failure', message: 'Server error' });
-    }
-});
-
-// 全局错误处理（可选）
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
 });
 
 // 启动服务器
