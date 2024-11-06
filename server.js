@@ -19,16 +19,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // 配置 MongoDB 连接
-mongoose.connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-})
-.then(() => {
-    console.log('Connected to MongoDB Atlas');
-})
-.catch(err => {
-    console.error('MongoDB connection error:', err);
-});
+mongoose.connect(process.env.MONGODB_URI)
+    .then(() => {
+        console.log('Connected to MongoDB Atlas');
+    })
+    .catch(err => {
+        console.error('MongoDB connection error:', err);
+    });
+
 
 // 定义一个简单的 Schema 和模型（例如，记事）
 const noteSchema = new mongoose.Schema({
