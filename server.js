@@ -46,10 +46,13 @@ uploadFolders.forEach(folder => {
     }
 });
 
-// 连接到 MongoDB（在此处替换为 MongoDB Atlas URI 或其他远程数据库）
-//mongoose.connect('your_remote_mongodb_uri')
- //   .then(() => console.log('Connected to MongoDB'))
- //   .catch(err => console.error('MongoDB connection error:', err));
+// 连接到 MongoDB（可选，如果不使用 MongoDB，请注释掉此部分）
+//mongoose.connect(process.env.MONGODB_URI || 'your_mongodb_atlas_uri', {
+//   // useNewUrlParser: true,
+//    useUnifiedTopology: true
+//})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('MongoDB connection error:', err));
 
 // 定义记事 Schema 和模型
 const noteSchema = new mongoose.Schema({
@@ -102,6 +105,75 @@ app.post('/upload', upload.fields([
         console.error(err);
         res.status(500).send('Error saving note');
     }
+});
+
+// 删除单个记事
+app.post('/delete/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+        const note = await Note.findById(id);
+        if (note) {
+            if (note.image) {
+                fs.unlink(path.join(__dirname, 'static', note.image), err => {
+                    if (err) console.error(err);
+                });
+            }
+            if (note.video) {
+                fs.unlink(path.join(__dirname, 'static', note.video), err => {
+                    if (err) console.error(err);
+                });
+            }
+            if (note.document) {
+                fs.unlink(path.join(__dirname, 'static', note.document), err => {
+                    if (err) console.error(err);
+                });
+            }
+
+            await Note.findByIdAndDelete(id);
+            res.json({ status: 'success' });
+        } else {
+            res.json({ status: 'failure', message: 'Note not found' });
+        }
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ status: 'failure', message: 'Server error' });
+    }
+});
+
+// 删除所有记事
+app.post('/delete_all', async (req, res) => {
+    try {
+        const allNotes = await Note.find();
+        allNotes.forEach(note => {
+            if (note.image) {
+                fs.unlink(path.join(__dirname, 'static', note.image), err => {
+                    if (err) console.error(err);
+                });
+            }
+            if (note.video) {
+                fs.unlink(path.join(__dirname, 'static', note.video), err => {
+                    if (err) console.error(err);
+                });
+            }
+            if (note.document) {
+                fs.unlink(path.join(__dirname, 'static', note.document), err => {
+                    if (err) console.error(err);
+                });
+            }
+        });
+
+        await Note.deleteMany({});
+        res.json({ status: 'success' });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ status: 'failure', message: 'Server error' });
+    }
+});
+
+// 全局错误处理（可选）
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something broke!');
 });
 
 // 启动服务器
