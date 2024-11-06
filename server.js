@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const multer = require('multer');
 const fs = require('fs');
-const mongoose = require('mongoose');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -46,11 +45,19 @@ uploadFolders.forEach(folder => {
     }
 });
 
-// 连接到 MongoDB（可选，如果不使用 MongoDB，请注释掉此部分）
-//mongoose.connect(process.env.MONGODB_URI || 'your_mongodb_atlas_uri', {
-//   // useNewUrlParser: true,
-//    useUnifiedTopology: true
-//})
+const mongoose = require('mongoose');
+
+mongoose.connect(process.env.MONGODB_URI, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+})
+.then(() => {
+    console.log('Connected to MongoDB Atlas');
+})
+.catch(err => {
+    console.error('MongoDB connection error:', err);
+});
+
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
 
