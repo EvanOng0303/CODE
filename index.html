@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title></title>
+    <title>记事本应用</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"/>
@@ -24,7 +24,7 @@
         </header>
         <main>
             <section class="mb-8">
-                <h2 class="text-2xl font-bold mb-4">上传</h2>
+                <h2 class="text-2xl font-bold mb-4">上传新记事</h2>
                 <form id="note-form" class="bg-white p-6 rounded shadow-md">
                     <div class="mb-4">
                         <label class="block text-gray-700" for="title">标题</label>
@@ -59,30 +59,70 @@
         </main>
     </div>
     <script>
-        document.getElementById('note-form').addEventListener('submit', function(event) {
-            event.preventDefault();
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNotes();
 
-            const title = document.getElementById('title').value;
-            const content = document.getElementById('content').value;
-            const image = document.getElementById('image').files[0];
-            const video = document.getElementById('video').files[0];
-            const documentFile = document.getElementById('document').files[0];
+            document.getElementById('note-form').addEventListener('submit', function(event) {
+                event.preventDefault();
 
-            const note = document.createElement('div');
-            note.className = 'bg-white p-6 rounded shadow-md';
+                const title = document.getElementById('title').value;
+                const content = document.getElementById('content').value;
+                const image = document.getElementById('image').files[0];
+                const video = document.getElementById('video').files[0];
+                const documentFile = document.getElementById('document').files[0];
+
+                const note = {
+                    id: Date.now(),
+                    title,
+                    content,
+                    image: image ? URL.createObjectURL(image) : null,
+                    video: video ? URL.createObjectURL(video) : null,
+                    document: documentFile ? URL.createObjectURL(documentFile) : null,
+                    time: new Date().toLocaleString()
+                };
+
+                saveNoteToLocalStorage(note);
+                addNoteToDOM(note);
+
+                // Clear the form
+                document.getElementById('note-form').reset();
+            });
+
+            document.getElementById('delete-all').addEventListener('click', function() {
+                localStorage.removeItem('notes');
+                document.getElementById('notes-list').innerHTML = '';
+            });
+        });
+
+        function saveNoteToLocalStorage(note) {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            notes.push(note);
+            localStorage.setItem('notes', JSON.stringify(notes));
+        }
+
+        function loadNotes() {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            notes.forEach(note => addNoteToDOM(note));
+        }
+
+        function addNoteToDOM(note) {
+            const noteElement = document.createElement('div');
+            noteElement.className = 'bg-white p-6 rounded shadow-md';
+            noteElement.dataset.id = note.id;
 
             const noteHeader = document.createElement('div');
             noteHeader.className = 'flex justify-between items-center mb-2';
 
             const noteTitle = document.createElement('h3');
             noteTitle.className = 'text-xl font-bold';
-            noteTitle.textContent = title;
+            noteTitle.textContent = note.title;
 
             const deleteButton = document.createElement('button');
             deleteButton.className = 'text-red-500 hover:text-red-700';
             deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
             deleteButton.onclick = function() {
-                note.remove();
+                deleteNoteFromLocalStorage(note.id);
+                noteElement.remove();
             };
 
             noteHeader.appendChild(noteTitle);
@@ -90,53 +130,52 @@
 
             const noteTime = document.createElement('p');
             noteTime.className = 'text-gray-600 mb-2';
-            noteTime.textContent = `上传时间: ${new Date().toLocaleString()}`;
+            noteTime.textContent = `上传时间: ${note.time}`;
 
-            note.appendChild(noteHeader);
-            note.appendChild(noteTime);
+            noteElement.appendChild(noteHeader);
+            noteElement.appendChild(noteTime);
 
-            if (image) {
+            if (note.image) {
                 const noteImage = document.createElement('img');
                 noteImage.className = 'mb-4';
-                noteImage.src = URL.createObjectURL(image);
+                noteImage.src = note.image;
                 noteImage.alt = '用户上传的图片';
-                note.appendChild(noteImage);
+                noteElement.appendChild(noteImage);
             }
 
-            if (video) {
+            if (note.video) {
                 const noteVideo = document.createElement('video');
                 noteVideo.className = 'w-full mb-4';
                 noteVideo.controls = true;
                 const videoSource = document.createElement('source');
-                videoSource.src = URL.createObjectURL(video);
-                videoSource.type = video.type;
+                videoSource.src = note.video;
+                videoSource.type = 'video/mp4';
                 noteVideo.appendChild(videoSource);
-                note.appendChild(noteVideo);
+                noteElement.appendChild(noteVideo);
             }
 
-            if (documentFile) {
+            if (note.document) {
                 const noteDocument = document.createElement('a');
                 noteDocument.className = 'text-blue-500 hover:underline mb-4 block';
-                noteDocument.href = URL.createObjectURL(documentFile);
+                noteDocument.href = note.document;
                 noteDocument.textContent = '下载文档';
-                note.appendChild(noteDocument);
+                noteElement.appendChild(noteDocument);
             }
 
             const noteContent = document.createElement('p');
             noteContent.className = 'text-gray-700';
-            noteContent.textContent = content;
+            noteContent.textContent = note.content;
 
-            note.appendChild(noteContent);
+            noteElement.appendChild(noteContent);
 
-            document.getElementById('notes-list').appendChild(note);
+            document.getElementById('notes-list').appendChild(noteElement);
+        }
 
-            // Clear the form
-            document.getElementById('note-form').reset();
-        });
-
-        document.getElementById('delete-all').addEventListener('click', function() {
-            document.getElementById('notes-list').innerHTML = '';
-        });
+        function deleteNoteFromLocalStorage(id) {
+            const notes = JSON.parse(localStorage.getItem('notes')) || [];
+            const updatedNotes = notes.filter(note => note.id !== id);
+            localStorage.setItem('notes', JSON.stringify(updatedNotes));
+        }
     </script>
 </body>
 </html>
