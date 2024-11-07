@@ -1,5 +1,7 @@
-<html>
+<!DOCTYPE html>
+<html lang="zh">
 <head>
+    <meta charset="UTF-8">
     <title>记事本应用</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -25,7 +27,7 @@
         </header>
         <main>
             <section class="mb-8">
-                <h2 class="text-2xl font-bold mb-4">上传</h2>
+                <h2 class="text-2xl font-bold mb-4">上传新记事</h2>
                 <form id="note-form" class="bg-white p-6 rounded shadow-md">
                     <div class="mb-4">
                         <label class="block text-gray-700" for="title">标题</label>
@@ -59,52 +61,82 @@
             </section>
         </main>
     </div>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            loadNotes();
 
-            document.getElementById('note-form').addEventListener('submit', function(event) {
-                event.preventDefault();
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
 
-                const title = document.getElementById('title').value;
-                const content = document.getElementById('content').value;
-                const image = document.getElementById('image').files[0];
-                const video = document.getElementById('video').files[0];
-                const documentFile = document.getElementById('document').files[0];
+        const firebaseConfig = {
+            apiKey: "AIzaSyDh2Y8T8ttPU3dnDAR7_lxL5rTvdOyhVCw",
+            authDomain: "code-a1a49.firebaseapp.com",
+            projectId: "code-a1a49",
+            storageBucket: "code-a1a49.appspot.com",
+            messagingSenderId: "137612060394",
+            appId: "1:137612060394:web:67ab65b79c3747ff73d993",
+            measurementId: "G-Q91XCHVVYC"
+        };
 
-                const note = {
-                    id: Date.now(),
-                    title,
-                    content,
-                    image: image ? URL.createObjectURL(image) : null,
-                    video: video ? URL.createObjectURL(video) : null,
-                    document: documentFile ? URL.createObjectURL(documentFile) : null,
-                    time: new Date().toLocaleString()
-                };
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
 
-                saveNoteToLocalStorage(note);
-                addNoteToDOM(note);
-
-                // Clear the form
-                document.getElementById('note-form').reset();
+        async function loadNotes() {
+            const querySnapshot = await getDocs(collection(db, "notes"));
+            querySnapshot.forEach((doc) => {
+                addNoteToDOM({ id: doc.id, ...doc.data() });
             });
+        }
 
-            document.getElementById('delete-all').addEventListener('click', function() {
-                localStorage.removeItem('notes');
-                document.getElementById('notes-list').innerHTML = '';
-            });
+        document.getElementById('note-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const imageFile = document.getElementById('image').files[0];
+            const videoFile = document.getElementById('video').files[0];
+            const documentFile = document.getElementById('document').files[0];
+
+            const noteData = { title, content, time: new Date().toISOString() };
+            
+            if (imageFile) {
+                const imageRef = ref(storage, `images/${imageFile.name}`);
+                await uploadBytes(imageRef, imageFile);
+                noteData.image = await getDownloadURL(imageRef);
+            }
+            
+            if (videoFile) {
+                const videoRef = ref(storage, `videos/${videoFile.name}`);
+                await uploadBytes(videoRef, videoFile);
+                noteData.video = await getDownloadURL(videoRef);
+            }
+            
+            if (documentFile) {
+                const documentRef = ref(storage, `documents/${documentFile.name}`);
+                await uploadBytes(documentRef, documentFile);
+                noteData.document = await getDownloadURL(documentRef);
+            }
+
+            const docRef = await addDoc(collection(db, "notes"), noteData);
+            addNoteToDOM({ id: docRef.id, ...noteData });
+            document.getElementById('note-form').reset();
         });
 
-        function saveNoteToLocalStorage(note) {
-            const notes = JSON.parse(localStorage.getItem('notes')) || [];
-            notes.push(note);
-            localStorage.setItem('notes', JSON.stringify(notes));
-        }
+        document.getElementById('delete-all').addEventListener('click', async function() {
+            const querySnapshot = await getDocs(collection(db, "notes"));
+            querySnapshot.forEach(async (docSnapshot) => {
+                const data = docSnapshot.data();
+                
+                if (data.image) await deleteObject(ref(storage, data.image));
+                if (data.video) await deleteObject(ref(storage, data.video));
+                if (data.document) await deleteObject(ref(storage, data.document));
 
-        function loadNotes() {
-            const notes = JSON.parse(localStorage.getItem('notes')) || [];
-            notes.forEach(note => addNoteToDOM(note));
-        }
+                await deleteDoc(doc(db, "notes", docSnapshot.id));
+            });
+
+            document.getElementById('notes-list').innerHTML = '';
+        });
 
         function addNoteToDOM(note) {
             const noteElement = document.createElement('div');
@@ -121,8 +153,11 @@
             const deleteButton = document.createElement('button');
             deleteButton.className = 'text-red-500 hover:text-red-700';
             deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
-            deleteButton.onclick = function() {
-                deleteNoteFromLocalStorage(note.id);
+            deleteButton.onclick = async function() {
+                if (note.image) await deleteObject(ref(storage, note.image));
+                if (note.video) await deleteObject(ref(storage, note.video));
+                if (note.document) await deleteObject(ref(storage, note.document));
+                await deleteDoc(doc(db, "notes", note.id));
                 noteElement.remove();
             };
 
@@ -172,11 +207,9 @@
             document.getElementById('notes-list').appendChild(noteElement);
         }
 
-        function deleteNoteFromLocalStorage(id) {
-            const notes = JSON.parse(localStorage.getItem('notes')) || [];
-            const updatedNotes = notes.filter(note => note.id !== id);
-            localStorage.setItem('notes', JSON.stringify(updatedNotes));
-        }
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNotes();
+        });
     </script>
 </body>
 </html>
