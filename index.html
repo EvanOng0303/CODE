@@ -62,7 +62,31 @@
     </div>
 
     <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
 
+        const firebaseConfig = {
+            apiKey: "AIzaSyDh2Y8T8ttPU3dnDAR7_lxL5rTvdOyhVCw",
+            authDomain: "code-a1a49.firebaseapp.com",
+            projectId: "code-a1a49",
+            storageBucket: "code-a1a49.appspot.com",
+            messagingSenderId: "137612060394",
+            appId: "1:137612060394:web:67ab65b79c3747ff73d993",
+            measurementId: "G-Q91XCHVVYC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        async function loadNotes() {
+            const querySnapshot = await getDocs(collection(db, "notes"));
+            querySnapshot.forEach((doc) => {
+                addNoteToDOM({ id: doc.id, ...doc.data() });
+            });
+        }
 
         document.getElementById('note-form').addEventListener('submit', async function(event) {
             event.preventDefault();
