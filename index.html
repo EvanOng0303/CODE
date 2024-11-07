@@ -1,180 +1,142 @@
 <html>
- <head>
-  <title>
-   记事本应用
-  </title>
-  <script src="https://cdn.tailwindcss.com">
-  </script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&amp;display=swap" rel="stylesheet"/>
-  <style>
-   body {
+<head>
+    <title>记事本应用</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap" rel="stylesheet"/>
+    <style>
+        body {
             font-family: 'Noto Sans SC', sans-serif;
         }
-  </style>
- </head>
- <body class="bg-gray-100">
-  <div class="container mx-auto p-4">
-   <header class="flex justify-between items-center py-4">
-    <h1 class="text-3xl font-bold">
-     记事本应用
-    </h1>
-    <nav>
-     <ul class="flex space-x-4">
-      <li>
-       <a class="text-blue-500 hover:underline" href="#">
-        首页
-       </a>
-      </li>
-      <li>
-       <a class="text-blue-500 hover:underline" href="#">
-        关于
-       </a>
-      </li>
-      <li>
-       <a class="text-blue-500 hover:underline" href="#">
-        联系
-       </a>
-      </li>
-     </ul>
-    </nav>
-   </header>
-   <main>
-    <section class="mb-8">
-     <h2 class="text-2xl font-bold mb-4">
-      上传新记事
-     </h2>
-     <form class="bg-white p-6 rounded shadow-md">
-      <div class="mb-4">
-       <label class="block text-gray-700" for="title">
-        标题
-       </label>
-       <input class="w-full p-2 border border-gray-300 rounded mt-1" id="title" type="text"/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700" for="image">
-        图片
-       </label>
-       <input class="w-full p-2 border border-gray-300 rounded mt-1" id="image" type="file"/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700" for="video">
-        影片
-       </label>
-       <input class="w-full p-2 border border-gray-300 rounded mt-1" id="video" type="file"/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700" for="document">
-        文档
-       </label>
-       <input class="w-full p-2 border border-gray-300 rounded mt-1" id="document" type="file"/>
-      </div>
-      <div class="mb-4">
-       <label class="block text-gray-700" for="content">
-        内容
-       </label>
-       <textarea class="w-full p-2 border border-gray-300 rounded mt-1" id="content" rows="4"></textarea>
-      </div>
-      <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit">
-       上传
-      </button>
-     </form>
-    </section>
-    <section>
-     <h2 class="text-2xl font-bold mb-4">
-      记事列表
-     </h2>
-     <button class="bg-red-500 text-white px-4 py-2 rounded mb-4" id="delete-all">
-      全部删除
-     </button>
-     <div class="space-y-4" id="notes-list">
-      <div class="bg-white p-6 rounded shadow-md">
-       <div class="flex justify-between items-center mb-2">
-        <h3 class="text-xl font-bold">
-         记事标题 1
-        </h3>
-        <button class="text-red-500 hover:text-red-700" onclick="deleteNote(this)">
-         <i class="fas fa-trash-alt">
-         </i>
-        </button>
-       </div>
-       <p class="text-gray-600 mb-2">
-        上传时间: 2023-10-01 14:30
-       </p>
-       <img alt="描述详细的图片内容" class="mb-4" height="400" src="https://storage.googleapis.com/a1aa/image/GjIU4NB4N3ZqENkx512Vxg3SxjJtngWEm7r07SK9WDHf5E3JA.jpg" width="600"/>
-       <video class="w-full mb-4" controls="">
-        <source src="https://placehold.co/600x400" type="video/mp4"/>
-        您的浏览器不支持 HTML5 视频。
-       </video>
-       <a class="text-blue-500 hover:underline mb-4 block" href="https://placehold.co/600x400">
-        下载文档
-       </a>
-       <p class="text-gray-700">
-        这是记事的内容部分，详细描述记事的内容。
-       </p>
-      </div>
-      <div class="bg-white p-6 rounded shadow-md">
-       <div class="flex justify-between items-center mb-2">
-        <h3 class="text-xl font-bold">
-         记事标题 2
-        </h3>
-        <button class="text-red-500 hover:text-red-700" onclick="deleteNote(this)">
-         <i class="fas fa-trash-alt">
-         </i>
-        </button>
-       </div>
-       <p class="text-gray-600 mb-2">
-        上传时间: 2023-10-02 15:45
-       </p>
-       <img alt="描述详细的图片内容" class="mb-4" height="400" src="https://storage.googleapis.com/a1aa/image/GjIU4NB4N3ZqENkx512Vxg3SxjJtngWEm7r07SK9WDHf5E3JA.jpg" width="600"/>
-       <video class="w-full mb-4" controls="">
-        <source src="https://placehold.co/600x400" type="video/mp4"/>
-        您的浏览器不支持 HTML5 视频。
-       </video>
-       <a class="text-blue-500 hover:underline mb-4 block" href="https://placehold.co/600x400">
-        下载文档
-       </a>
-       <p class="text-gray-700">
-        这是记事的内容部分，详细描述记事的内容。
-       </p>
-      </div>
-      <div class="bg-white p-6 rounded shadow-md">
-       <div class="flex justify-between items-center mb-2">
-        <h3 class="text-xl font-bold">
-         记事标题 3
-        </h3>
-        <button class="text-red-500 hover:text-red-700" onclick="deleteNote(this)">
-         <i class="fas fa-trash-alt">
-         </i>
-        </button>
-       </div>
-       <p class="text-gray-600 mb-2">
-        上传时间: 2023-10-03 16:00
-       </p>
-       <img alt="描述详细的图片内容" class="mb-4" height="400" src="https://storage.googleapis.com/a1aa/image/GjIU4NB4N3ZqENkx512Vxg3SxjJtngWEm7r07SK9WDHf5E3JA.jpg" width="600"/>
-       <video class="w-full mb-4" controls="">
-        <source src="https://placehold.co/600x400" type="video/mp4"/>
-        您的浏览器不支持 HTML5 视频。
-       </video>
-       <a class="text-blue-500 hover:underline mb-4 block" href="https://placehold.co/600x400">
-        下载文档
-       </a>
-       <p class="text-gray-700">
-        这是记事的内容部分，详细描述记事的内容。
-       </p>
-      </div>
-     </div>
-    </section>
-   </main>
-  </div>
-  <script>
-   function deleteNote(element) {
-            element.closest('.bg-white').remove();
-        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-4">
+        <header class="flex justify-between items-center py-4">
+            <h1 class="text-3xl font-bold">记事本应用</h1>
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a class="text-blue-500 hover:underline" href="#">首页</a></li>
+                    <li><a class="text-blue-500 hover:underline" href="#">关于</a></li>
+                    <li><a class="text-blue-500 hover:underline" href="#">联系</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <section class="mb-8">
+                <h2 class="text-2xl font-bold mb-4">上传新记事</h2>
+                <form id="note-form" class="bg-white p-6 rounded shadow-md">
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="title">标题</label>
+                        <input class="w-full p-2 border border-gray-300 rounded mt-1" id="title" type="text" required/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="image">图片</label>
+                        <input class="w-full p-2 border border-gray-300 rounded mt-1" id="image" type="file" accept="image/*"/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="video">影片</label>
+                        <input class="w-full p-2 border border-gray-300 rounded mt-1" id="video" type="file" accept="video/*"/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="document">文档</label>
+                        <input class="w-full p-2 border border-gray-300 rounded mt-1" id="document" type="file" accept=".pdf,.doc,.docx"/>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700" for="content">内容</label>
+                        <textarea class="w-full p-2 border border-gray-300 rounded mt-1" id="content" rows="4" required></textarea>
+                    </div>
+                    <button class="bg-blue-500 text-white px-4 py-2 rounded" type="submit">上传</button>
+                </form>
+            </section>
+            <section>
+                <h2 class="text-2xl font-bold mb-4">记事列表</h2>
+                <button class="bg-red-500 text-white px-4 py-2 rounded mb-4" id="delete-all">全部删除</button>
+                <div class="space-y-4" id="notes-list">
+                    <!-- Notes will be dynamically added here -->
+                </div>
+            </section>
+        </main>
+    </div>
+    <script>
+        document.getElementById('note-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const title = document.getElementById('title').value;
+            const content = document.getElementById('content').value;
+            const image = document.getElementById('image').files[0];
+            const video = document.getElementById('video').files[0];
+            const documentFile = document.getElementById('document').files[0];
+
+            const note = document.createElement('div');
+            note.className = 'bg-white p-6 rounded shadow-md';
+
+            const noteHeader = document.createElement('div');
+            noteHeader.className = 'flex justify-between items-center mb-2';
+
+            const noteTitle = document.createElement('h3');
+            noteTitle.className = 'text-xl font-bold';
+            noteTitle.textContent = title;
+
+            const deleteButton = document.createElement('button');
+            deleteButton.className = 'text-red-500 hover:text-red-700';
+            deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
+            deleteButton.onclick = function() {
+                note.remove();
+            };
+
+            noteHeader.appendChild(noteTitle);
+            noteHeader.appendChild(deleteButton);
+
+            const noteTime = document.createElement('p');
+            noteTime.className = 'text-gray-600 mb-2';
+            noteTime.textContent = `上传时间: ${new Date().toLocaleString()}`;
+
+            note.appendChild(noteHeader);
+            note.appendChild(noteTime);
+
+            if (image) {
+                const noteImage = document.createElement('img');
+                noteImage.className = 'mb-4';
+                noteImage.src = URL.createObjectURL(image);
+                noteImage.alt = '用户上传的图片';
+                note.appendChild(noteImage);
+            }
+
+            if (video) {
+                const noteVideo = document.createElement('video');
+                noteVideo.className = 'w-full mb-4';
+                noteVideo.controls = true;
+                const videoSource = document.createElement('source');
+                videoSource.src = URL.createObjectURL(video);
+                videoSource.type = video.type;
+                noteVideo.appendChild(videoSource);
+                note.appendChild(noteVideo);
+            }
+
+            if (documentFile) {
+                const noteDocument = document.createElement('a');
+                noteDocument.className = 'text-blue-500 hover:underline mb-4 block';
+                noteDocument.href = URL.createObjectURL(documentFile);
+                noteDocument.textContent = '下载文档';
+                note.appendChild(noteDocument);
+            }
+
+            const noteContent = document.createElement('p');
+            noteContent.className = 'text-gray-700';
+            noteContent.textContent = content;
+
+            note.appendChild(noteContent);
+
+            document.getElementById('notes-list').appendChild(note);
+
+            // Clear the form
+            document.getElementById('note-form').reset();
+        });
 
         document.getElementById('delete-all').addEventListener('click', function() {
             document.getElementById('notes-list').innerHTML = '';
         });
-  </script>
- </body>
+    </script>
+</body>
 </html>
