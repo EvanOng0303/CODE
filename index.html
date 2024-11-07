@@ -26,7 +26,7 @@
         </header>
         <main>
             <section class="mb-8">
-                <h2 class="text-2xl font-bold mb-4">上传</h2>
+                <h2 class="text-2xl font-bold mb-4">上传新记事</h2>
                 <form id="note-form" class="bg-white p-6 rounded shadow-md">
                     <div class="mb-4">
                         <label class="block text-gray-700" for="title">标题</label>
@@ -61,8 +61,34 @@
         </main>
     </div>
 
-    <script>
-        document.getElementById('note-form').addEventListener('submit', function(event) {
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/9.0.0/firebase-storage.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDh2Y8T8ttPU3dnDAR7_lxL5rTvdOyhVCw",
+            authDomain: "code-a1a49.firebaseapp.com",
+            projectId: "code-a1a49",
+            storageBucket: "code-a1a49.appspot.com",
+            messagingSenderId: "137612060394",
+            appId: "1:137612060394:web:67ab65b79c3747ff73d993",
+            measurementId: "G-Q91XCHVVYC"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const storage = getStorage(app);
+
+        async function loadNotes() {
+            const querySnapshot = await getDocs(collection(db, "notes"));
+            querySnapshot.forEach((doc) => {
+                addNoteToDOM({ id: doc.id, ...doc.data() });
+            });
+        }
+
+        document.getElementById('note-form').addEventListener('submit', async function(event) {
             event.preventDefault();
 
             const title = document.getElementById('title').value;
@@ -72,41 +98,47 @@
             const documentFile = document.getElementById('document').files[0];
 
             const noteData = { title, content, time: new Date().toISOString() };
+            
+            try {
+                if (imageFile) {
+                    const imageRef = ref(storage, `images/${imageFile.name}`);
+                    await uploadBytes(imageRef, imageFile);
+                    noteData.image = await getDownloadURL(imageRef);
+                }
+                
+                if (videoFile) {
+                    const videoRef = ref(storage, `videos/${videoFile.name}`);
+                    await uploadBytes(videoRef, videoFile);
+                    noteData.video = await getDownloadURL(videoRef);
+                }
+                
+                if (documentFile) {
+                    const documentRef = ref(storage, `documents/${documentFile.name}`);
+                    await uploadBytes(documentRef, documentFile);
+                    noteData.document = await getDownloadURL(documentRef);
+                }
 
-            if (imageFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    noteData.image = e.target.result;
-                    addNoteToDOM(noteData);
-                };
-                reader.readAsDataURL(imageFile);
-            } else {
-                addNoteToDOM(noteData);
+                const docRef = await addDoc(collection(db, "notes"), noteData);
+                addNoteToDOM({ id: docRef.id, ...noteData });
+                document.getElementById('note-form').reset();
+            } catch (error) {
+                console.error("Error uploading files: ", error);
             }
+        });
 
-            if (videoFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    noteData.video = e.target.result;
-                    addNoteToDOM(noteData);
-                };
-                reader.readAsDataURL(videoFile);
-            } else {
-                addNoteToDOM(noteData);
-            }
+        document.getElementById('delete-all').addEventListener('click', async function() {
+            const querySnapshot = await getDocs(collection(db, "notes"));
+            querySnapshot.forEach(async (docSnapshot) => {
+                const data = docSnapshot.data();
+                
+                if (data.image) await deleteObject(ref(storage, data.image));
+                if (data.video) await deleteObject(ref(storage, data.video));
+                if (data.document) await deleteObject(ref(storage, data.document));
 
-            if (documentFile) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    noteData.document = e.target.result;
-                    addNoteToDOM(noteData);
-                };
-                reader.readAsDataURL(documentFile);
-            } else {
-                addNoteToDOM(noteData);
-            }
+                await deleteDoc(doc(db, "notes", docSnapshot.id));
+            });
 
-            document.getElementById('note-form').reset();
+            document.getElementById('notes-list').innerHTML = '';
         });
 
         function addNoteToDOM(note) {
@@ -124,7 +156,11 @@
             const deleteButton = document.createElement('button');
             deleteButton.className = 'text-red-500 hover:text-red-700';
             deleteButton.innerHTML = '<i class="fas fa-trash-alt"></i>';
-            deleteButton.onclick = function() {
+            deleteButton.onclick = async function() {
+                if (note.image) await deleteObject(ref(storage, note.image));
+                if (note.video) await deleteObject(ref(storage, note.video));
+                if (note.document) await deleteObject(ref(storage, note.document));
+                await deleteDoc(doc(db, "notes", note.id));
                 noteElement.remove();
             };
 
@@ -173,6 +209,10 @@
 
             document.getElementById('notes-list').appendChild(noteElement);
         }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNotes();
+        });
     </script>
 </body>
 </html>
