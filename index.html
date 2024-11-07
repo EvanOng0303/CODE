@@ -26,7 +26,7 @@
         </header>
         <main>
             <section class="mb-8">
-                <h2 class="text-2xl font-bold mb-4">上传</h2>
+                <h2 class="text-2xl font-bold mb-4">上传新记事</h2>
                 <form id="note-form" class="bg-white p-6 rounded shadow-md">
                     <div class="mb-4">
                         <label class="block text-gray-700" for="title">标题</label>
@@ -99,27 +99,31 @@
 
             const noteData = { title, content, time: new Date().toISOString() };
             
-            if (imageFile) {
-                const imageRef = ref(storage, `images/${imageFile.name}`);
-                await uploadBytes(imageRef, imageFile);
-                noteData.image = await getDownloadURL(imageRef);
-            }
-            
-            if (videoFile) {
-                const videoRef = ref(storage, `videos/${videoFile.name}`);
-                await uploadBytes(videoRef, videoFile);
-                noteData.video = await getDownloadURL(videoRef);
-            }
-            
-            if (documentFile) {
-                const documentRef = ref(storage, `documents/${documentFile.name}`);
-                await uploadBytes(documentRef, documentFile);
-                noteData.document = await getDownloadURL(documentRef);
-            }
+            try {
+                if (imageFile) {
+                    const imageRef = ref(storage, `images/${imageFile.name}`);
+                    await uploadBytes(imageRef, imageFile);
+                    noteData.image = await getDownloadURL(imageRef);
+                }
+                
+                if (videoFile) {
+                    const videoRef = ref(storage, `videos/${videoFile.name}`);
+                    await uploadBytes(videoRef, videoFile);
+                    noteData.video = await getDownloadURL(videoRef);
+                }
+                
+                if (documentFile) {
+                    const documentRef = ref(storage, `documents/${documentFile.name}`);
+                    await uploadBytes(documentRef, documentFile);
+                    noteData.document = await getDownloadURL(documentRef);
+                }
 
-            const docRef = await addDoc(collection(db, "notes"), noteData);
-            addNoteToDOM({ id: docRef.id, ...noteData });
-            document.getElementById('note-form').reset();
+                const docRef = await addDoc(collection(db, "notes"), noteData);
+                addNoteToDOM({ id: docRef.id, ...noteData });
+                document.getElementById('note-form').reset();
+            } catch (error) {
+                console.error("Error uploading files: ", error);
+            }
         });
 
         document.getElementById('delete-all').addEventListener('click', async function() {
