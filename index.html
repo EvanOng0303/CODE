@@ -1,5 +1,7 @@
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>前端页面</title>
     <style>
         body {
@@ -133,26 +135,15 @@
             document.getElementById(id).textContent = text;
         }
 
-        // Fetch the text content from local storage and update the front-end page
+        // Fetch the text content from the API and update the front-end page
         document.addEventListener("DOMContentLoaded", function() {
-            const elements = [
-                "title1", "title2", "paragraph1", "paragraph2",
-                "section1", "section2", "listItem1", "listItem2",
-                "listItem3", "listItem4", "section3", "section4",
-                "listItem5", "listItem6", "tableTitle", "cell1",
-                "cell2", "cell3", "cell4", "cell5", "cell6",
-                "cell7", "cell8", "cell9", "cell10", "cell11",
-                "cell12", "cell13", "cell14", "cell15", "cell16",
-                "cell17", "cell18", "cell19", "cell20", "cell21",
-                "cell22", "cell23", "cell24"
-            ];
-
-            elements.forEach(function(id) {
-                const text = localStorage.getItem(id);
-                if (text) {
-                    updateTextContent(id, text);
-                }
-            });
+            fetch('http://localhost:3000/content')
+                .then(response => response.json())
+                .then(data => {
+                    for (const [id, text] of Object.entries(data)) {
+                        updateTextContent(id, text);
+                    }
+                });
 
             // Add additional rows if needed
             const tableBody = document.getElementById('tableBody');
@@ -163,7 +154,7 @@
                 const newRow = tableBody.insertRow();
                 for (let j = 0; j < 6; j++) {
                     const newCell = newRow.insertCell();
-                    newCell.id = `cell${i * 6 + j + 1}`;
+                    newCell.id = cell${i * 6 + j + 1};
                 }
             }
         });
