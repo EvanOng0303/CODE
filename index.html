@@ -1,6 +1,6 @@
 <html>
 <head>
-    <title>测试</title>
+    <title>前端页面</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -50,25 +50,25 @@
     </style>
 </head>
 <body>
-    <h1 id="title1">测试</h1>
-    <h1 id="title2">测试</h1>
-    <p id="paragraph1">测试</p>
-    <p id="paragraph2">测试</p>
+    <h1 id="title1"></h1>
+    <h1 id="title2"></h1>
+    <p id="paragraph1"></p>
+    <p id="paragraph2"></p>
     
-    <h2 id="section1">测试</h2>
-    <h2 id="section2">测试</h2>
+    <h2 id="section1"></h2>
+    <h2 id="section2"></h2>
     <ul>
-        <li id="listItem1">测试</li>
-        <li id="listItem2">测试</li>
-        <li id="listItem3">测试</li>
-        <li id="listItem4">测试</li>
+        <li id="listItem1"></li>
+        <li id="listItem2"></li>
+        <li id="listItem3"></li>
+        <li id="listItem4"></li>
     </ul>
     
-    <h2 id="section3">测试</h2>
-    <h2 id="section4">测试</h2>
+    <h2 id="section3"></h2>
+    <h2 id="section4"></h2>
     <ul>
-        <li id="listItem5">测试</li>
-        <li id="listItem6">测试</li>
+        <li id="listItem5"></li>
+        <li id="listItem6"></li>
     </ul>
     
     <div class="dropdown">
@@ -79,7 +79,7 @@
     </div>
     
     <div class="schedule">
-        <h3 id="tableTitle">测试</h3>
+        <h3 id="tableTitle"></h3>
         <table class="schedule-table">
             <thead>
                 <tr>
@@ -91,38 +91,38 @@
                     <th>是否已修复</th>
                 </tr>
             </thead>
-            <tbody>
+            <tbody id="tableBody">
                 <tr>
-                    <td id="cell1">测试</td>
-                    <td id="cell2">测试</td>
-                    <td id="cell3">测试</td>
-                    <td id="cell4">测试</td>
-                    <td id="cell5">测试</td>
-                    <td id="cell6">测试</td>
+                    <td id="cell1"></td>
+                    <td id="cell2"></td>
+                    <td id="cell3"></td>
+                    <td id="cell4"></td>
+                    <td id="cell5"></td>
+                    <td id="cell6"></td>
                 </tr>
                 <tr>
-                    <td id="cell7">测试</td>
-                    <td id="cell8">测试</td>
-                    <td id="cell9">测试</td>
-                    <td id="cell10">测试</td>
-                    <td id="cell11">测试</td>
-                    <td id="cell12">测试</td>
+                    <td id="cell7"></td>
+                    <td id="cell8"></td>
+                    <td id="cell9"></td>
+                    <td id="cell10"></td>
+                    <td id="cell11"></td>
+                    <td id="cell12"></td>
                 </tr>
                 <tr>
-                    <td id="cell13">测试</td>
-                    <td id="cell14">测试</td>
-                    <td id="cell15">测试</td>
-                    <td id="cell16">测试</td>
-                    <td id="cell17">测试</td>
-                    <td id="cell18">测试</td>
+                    <td id="cell13"></td>
+                    <td id="cell14"></td>
+                    <td id="cell15"></td>
+                    <td id="cell16"></td>
+                    <td id="cell17"></td>
+                    <td id="cell18"></td>
                 </tr>
                 <tr>
-                    <td id="cell19">测试</td>
-                    <td id="cell20">测试</td>
-                    <td id="cell21">测试</td>
-                    <td id="cell22">测试</td>
-                    <td id="cell23">测试</td>
-                    <td id="cell24">测试</td>
+                    <td id="cell19"></td>
+                    <td id="cell20"></td>
+                    <td id="cell21"></td>
+                    <td id="cell22"></td>
+                    <td id="cell23"></td>
+                    <td id="cell24"></td>
                 </tr>
             </tbody>
         </table>
@@ -153,6 +153,19 @@
                     updateTextContent(id, text);
                 }
             });
+
+            // Add additional rows if needed
+            const tableBody = document.getElementById('tableBody');
+            const rowCount = tableBody.rows.length;
+            const storedRowCount = localStorage.getItem('rowCount') || rowCount;
+
+            for (let i = rowCount; i < storedRowCount; i++) {
+                const newRow = tableBody.insertRow();
+                for (let j = 0; j < 6; j++) {
+                    const newCell = newRow.insertCell();
+                    newCell.id = `cell${i * 6 + j + 1}`;
+                }
+            }
         });
     </script>
 </body>
