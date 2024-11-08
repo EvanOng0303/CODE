@@ -137,7 +137,7 @@
 
         // Fetch the text content from the API and update the front-end page
 document.addEventListener("DOMContentLoaded", function() {
-    fetch('http://localhost:3000/content') // 使用本地服务器地址
+    fetch('https://backend-server.vercel.app/content') // 使用本地服务器地址
         .then(response => response.json())
         .then(data => {
             for (const [id, text] of Object.entries(data)) {
