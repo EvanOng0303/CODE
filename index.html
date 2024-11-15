@@ -2,164 +2,737 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>前端页面</title>
+    <title>Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #fff;
-            color: #000;
+            background: linear-gradient(to right, #e0f7fa, #80deea);
         }
-        h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
+        h1, h2, h3 {
+            color: #2c3e50;
         }
-        p {
-            font-size: 14px;
-            line-height: 1.5;
+        .section {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        ul {
-            list-style-type: none;
-            padding: 0;
+        .section h2 {
+            margin-bottom: 1rem;
+            border-bottom: 2px solid #4caf50;
+            display: inline-block;
         }
-        ul li {
-            margin-bottom: 5px;
+        .item-list ul {
+            list-style-type: disc;
+            margin-left: 1.5rem;
         }
-        .highlight {
-            color: #007bff;
+        .item-list a {
+            color: #007acc;
+            text-decoration: none;
+            transition: color 0.2s;
         }
-        .schedule {
-            margin-top: 20px;
+        .item-list a:hover {
+            color: #005bb5;
         }
-        .schedule-table {
+        .content {
+            margin-top: 2rem;
+        }
+        .content img, .content video {
+            max-width: 100%;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .content img:hover, .content video:hover {
+            transform: scale(1.05);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.8);
         }
-        .schedule-table th, .schedule-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
+        .modal-content {
+            margin: 15% auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
         }
-        .schedule-table th {
-            background-color: #f2f2f2;
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.3s;
         }
-        .dropdown {
-            float: right;
-            margin-top: 10px;
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <h1 id="title1"></h1>
-    <h1 id="title2"></h1>
-    <p id="paragraph1"></p>
-    <p id="paragraph2"></p>
-    
-    <h2 id="section1"></h2>
-    <h2 id="section2"></h2>
-    <ul>
-        <li id="listItem1"></li>
-        <li id="listItem2"></li>
-        <li id="listItem3"></li>
-        <li id="listItem4"></li>
-    </ul>
-    
-    <h2 id="section3"></h2>
-    <h2 id="section4"></h2>
-    <ul>
-        <li id="listItem5"></li>
-        <li id="listItem6"></li>
-    </ul>
-    
-    <div class="dropdown">
-        <label for="schedule">选择日期:</label>
-        <select id="schedule">
-            <option>2024/11/04~2024/11/10</option>
-        </select>
-    </div>
-    
-    <div class="schedule">
-        <h3 id="tableTitle"></h3>
-        <table class="schedule-table">
-            <thead>
-                <tr>
-                    <th>厂商</th>
-                    <th>类型</th>
-                    <th>问题内容</th>
-                    <th>截图</th>
-                    <th>发现时间</th>
-                    <th>是否已修复</th>
-                </tr>
-            </thead>
-            <tbody id="tableBody">
-                <tr>
-                    <td id="cell1"></td>
-                    <td id="cell2"></td>
-                    <td id="cell3"></td>
-                    <td id="cell4"></td>
-                    <td id="cell5"></td>
-                    <td id="cell6"></td>
-                </tr>
-                <tr>
-                    <td id="cell7"></td>
-                    <td id="cell8"></td>
-                    <td id="cell9"></td>
-                    <td id="cell10"></td>
-                    <td id="cell11"></td>
-                    <td id="cell12"></td>
-                </tr>
-                <tr>
-                    <td id="cell13"></td>
-                    <td id="cell14"></td>
-                    <td id="cell15"></td>
-                    <td id="cell16"></td>
-                    <td id="cell17"></td>
-                    <td id="cell18"></td>
-                </tr>
-                <tr>
-                    <td id="cell19"></td>
-                    <td id="cell20"></td>
-                    <td id="cell21"></td>
-                    <td id="cell22"></td>
-                    <td id="cell23"></td>
-                    <td id="cell24"></td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-    <script>
-        // Function to update the text content of the front-end page
-        function updateTextContent(id, text) {
-            document.getElementById(id).textContent = text;
-        }
-
-        // Fetch the text content from the API and update the front-end page
-document.addEventListener("DOMContentLoaded", function() {
-    fetch('https://bo-prbs6vzx7-evanongs-projects.vercel.app/content') // 使用本地服务器地址
-        .then(response => response.json())
-        .then(data => {
-            for (const [id, text] of Object.entries(data)) {
-                document.getElementById(id).textContent = text;
-            }
-        })
-        .catch(error => console.error('跨域请求失败:', error));
-
-    // 添加额外的表格行（如果需要）
-    const tableBody = document.getElementById('tableBody');
-    const rowCount = tableBody.rows.length;
-    const storedRowCount = localStorage.getItem('rowCount') || rowCount;
-
-    for (let i = rowCount; i < storedRowCount; i++) {
-        const newRow = tableBody.insertRow();
-        for (let j = 0; j < 6; j++) {
-            const newCell = newRow.insertCell();
-            newCell.id = `cell${i * 6 + j + 1}`; // 使用模板字符串语法
-        }
-    }
-});
-
-    </script>
-</body>
-</html>
+    <div class="container mx-auto p-6">
+        <h1 class="text-4xl font-bold text-center mb-6">Documentation</h1>
+        <div class="section">
+            <h2 class="text-2xl font-semibold">HOME</h2>
+            <div class="item-list">
+                <ul>
+                    <li><a href="#my-account">My Account</a></li>
+                    <li><a href="#transfer">Transfer</a></li>
+                    <li><a href="#change-password">Change Password</a></li>
+                    <li><a href="#transaction">Transaction</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="text-2xl font-semibold">BANK</h2>
+            <div class="item-list">
+                <ul>
+                    <li><a href="#bank-list">Bank List</a></li>
+                    <li><a href="#bank-account">Bank Account</a></li>
+                    <li><a href="#bank-account-door">Bank Account Door</a></li>
+                    <li><a href="#member-bank-list">Member Bank List</a></li>
+                    <li><a href="#pay-bank-list">Pay Bank List</a></li>
+                    <li><a href="#bank-phone-list">Bank Phone List</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="text-2xl font-semibold">TRANSFER</h2>
+            <div class="item-list">
+                <ul>
+                    <li><a href="#new-transaction">New Transaction</a></li>
+                    <li><a href="#new-transaction-fast">New Transaction (Fast)</a></li>
+                    <li><a href="#transaction-history">Transaction History</a></li>
+                    <li><a href="#transaction-report">Transaction Report</a></li>
+                    <li><a href="#promotion-deposit-check">Promotion Deposit Check</a></li>
+                    <li><a href="#promotion-deposit-history">Promotion Deposit History</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="text-2xl font-semibold">ACCOUNT</h2>
+            <div class="item-list">
+                <ul>
+                    <li><a href="#domain-set">Domain Set</a></li>
+                    <li><a href="#subaccount-list">SubAccount List</a></li>
+                    <li><a href="#manager-list">Manager List</a></li>
+                    <li><a href="#comm-set">Comm Set</a></li>
+                    <li><a href="#agent-info">Agent Info</a></li>
+                    <li><a href="#member-list">Member List</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="text-2xl font-semibold">AGENT TRANSFER</h2>
+            <div class="item-list">
+                <ul>
+                    <li><a href="#agent-transfer">Agent Transfer</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="text-2xl font-semibold">REPORT</h2>
+            <div class="item-list">
+                <ul>
+                    <li><a href="#wl-report">W/L Report</a></li>
+                    <li><a href="#member-wl">Member W/L</a></li>
+                    <li><a href="#member-wl-detail">Member W/L Detail</a></li>
+                    <li><a href="#undone-member-wl">Undone Member W/L</a></li>
+                    <li><a href="#product-report">Product Report</a></li>
+                    <li><a href="#rebate-list">Rebate List</a></li>
+                    <li><a href="#summary-performance">Summary Performance</a></li>
+                    <li><a href="#referral-list">Referral List</a></li>
+                    <li><a href="#otp-report">OTP Report</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="text-2xl font-semibold">PROMOTION</h2>
+            <div class="item-list">
+                <ul>
+                    <li><a href="#rebate-set">Rebate Set</a></li>
+                    <li><a href="#promotion-group">Promotion Group</a></li>
+                    <li><a href="#promotion-list">Promotion List</a></li>
+                    <li><a href="#cash-back-set">Cash Back Set</a></li>
+                    <li><a href="#cash-back-send">Cash Back Send</a></li>
+                    <li><a href="#cash-back-log">Cash Back Log</a></li>
+                    <li><a href="#redpacket">RedPacket</a></li>
+                    <li><a href="#redpacket-history">RedPacket History</a></li>
+                    <li><a href="#reffpt-log-list">ReffPT Log List</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="text-2xl font-semibold">SYSTEM SET</h2>
+            <div class="item-list">
+                <ul>
+                    <li><a href="#banner-list">Banner List</a></li>
+                    <li><a href="#customer-list">Customer List</a></li>
+                    <li><a href="#dp-wd-set">DP/WD Set</a></li>
+                    <li><a href="#website-set">WebSite Set</a></li>
+                    <li><a href="#web-info">Web Info</a></li>
+                    <li><a href="#upload-image">Upload Image</a></li>
+                    <li><a href="#menu-list">Menu List</a></li>
+                    <li><a href="#member-ip-track">Member IP Track</a></li>
+                    <li><a href="#home-image-set">Home Image Set</a></li>
+                    <li><a href="#home-product">Home Product</a></li>
+                    <li><a href="#main-seo-settings">Main Seo Settings</a></li>
+                    <li><a href="#link-website">Link Website</a></li>
+                    <li><a href="#withdraw-set">Withdraw Set</a></li>
+                    <li><a href="#dp-amount-set">DP Amount Set</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="section">
+            <h2 class="text-2xl font-semibold">PRODUCT</h2>
+            <div class="item-list">
+                <ul>
+                    <li><a href="#product">Product</a></li>
+                </ul>
+            </div>
+        </div>
+        <!-- Content Sections -->
+        <div class="content">
+            <div class="section" id="my-account">
+                <h2 class="text-2xl font-semibold">My Account</h2>
+                <p class="text-gray-600 mb-4">Details about My Account...</p>
+                <img alt="Placeholder image of My Account section with user profile details" height="200" src="https://storage.googleapis.com/a1aa/image/fBgPMGI0CLUfPUkaexeOPXzKW2B4I7hcipPhSmBuSIGJOxEPB.jpg" width="300" onclick="openModal(this.src)" style=""/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+                <p class="text-gray-600 mt-4 mb-4">Additional details about My Account...</p>
+                <img alt="Placeholder image of additional details in My Account section" height="200" src="https://storage.googleapis.com/a1aa/image/8YAUzAu6fkQ7dqbKmviNaFRU6GtKvakEWvJFaxrJUAZwJm4JA.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+                <p class="text-gray-600 mt-4 mb-4">Further information about My Account...</p>
+                <img alt="Placeholder image of further information in My Account section" height="200" src="https://storage.googleapis.com/a1aa/image/3eyyhG2lpQ3MQKESdoUxJMpyW5OOnvjeAMFLbobqwqklTMxTA.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+                <p class="text-gray-600 mt-4 mb-4">Final details about My Account...</p>
+                <img alt="Placeholder image of final details in My Account section" height="200" src="https://storage.googleapis.com/a1aa/image/jicGBlGscOpMAdyZB8TvTwF6eoTPo8knHlFIBvoP0oAtJm4JA.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+                <p class="text-gray-600 mt-4 mb-4">More details about My Account...</p>
+                <img alt="Placeholder image of more details in My Account section" height="200" src="https://storage.googleapis.com/a1aa/image/8YAUzAu6fkQ7dqbKmviNaFRU6GtKvakEWvJFaxrJUAZwJm4JA.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="transfer">
+                <h2 class="text-2xl font-semibold">Transfer</h2>
+                <p class="text-gray-600 mb-4">Details about Transfer...</p>
+                <img alt="Placeholder image of Transfer section with transfer options" height="200" src="https://storage.googleapis.com/a1aa/image/qfui7foAjcuLLUu7NGh646xl2kG68KE1IFvteHWv7A2RnYinA.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="change-password">
+                <h2 class="text-2xl font-semibold">Change Password</h2>
+                <p class="text-gray-600 mb-4">Details about Change Password...</p>
+                <img alt="Placeholder image of Change Password section with password fields" height="200" src="https://storage.googleapis.com/a1aa/image/Dy7lfrqG1OXUWqyrPGcfwsGz2czyuJLR4ZnHCmQxZ2eCnYinA.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="transaction">
+                <h2 class="text-2xl font-semibold">Transaction</h2>
+                <p class="text-gray-600 mb-4">Details about Transaction...</p>
+                <img alt="Placeholder image of Transaction section with transaction history" height="200" src="https://storage.googleapis.com/a1aa/image/8YAUzAu6fkQ7dqbKmviNaFRU6GtKvakEWvJFaxrJUAZwJm4JA.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="bank-list">
+                <h2 class="text-2xl font-semibold">Bank List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank List...</p>
+                <img alt="Placeholder image of Bank List section with list of banks" height="200" src="https://storage.googleapis.com/a1aa/image/gpAaW3mkC0I7P1cCAkq4bYPjZs6Law46NmdYQZlAb583ET8E.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="bank-account">
+                <h2 class="text-2xl font-semibold">Bank Account</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account...</p>
+                <img alt="Placeholder image of Bank Account section with account details" height="200" src="https://storage.googleapis.com/a1aa/image/eNRIqdBfs7jO7kDXvlJnFHBj4fLi2cQ6RLidKYVffHFJdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="bank-account-door">
+                <h2 class="text-2xl font-semibold">Bank Account Door</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="member-bank-list">
+                <h2 class="text-2xl font-semibold">Member Bank List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="pay-bank-list">
+                <h2 class="text-2xl font-semibold">Pay Bank List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="bank-phone-list">
+                <h2 class="text-2xl font-semibold">Bank Phone List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="new-transaction">
+                <h2 class="text-2xl font-semibold">New Transaction</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="new-transaction-fast">
+                <h2 class="text-2xl font-semibold">New Transaction (Fast)</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="transaction-history">
+                <h2 class="text-2xl font-semibold">Transaction History</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="transaction-report">
+                <h2 class="text-2xl font-semibold">Transaction Report</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="promotion-deposit-check">
+                <h2 class="text-2xl font-semibold">Promotion Deposit Check</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="promotion-deposit-history">
+                <h2 class="text-2xl font-semibold">Promotion Deposit History</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="domain-set">
+                <h2 class="text-2xl font-semibold">Domain Set</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="subaccount-list">
+                <h2 class="text-2xl font-semibold">SubAccount List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="manager-list">
+                <h2 class="text-2xl font-semibold">Manager List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="comm-set">
+                <h2 class="text-2xl font-semibold">Comm Set</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="agent-info">
+                <h2 class="text-2xl font-semibold">Agent Info</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="member-list">
+                <h2 class="text-2xl font-semibold">Member List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="agent-transfer">
+                <h2 class="text-2xl font-semibold">Agent Transfer</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="wl-report">
+                <h2 class="text-2xl font-semibold">W/L Report</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="member-wl">
+                <h2 class="text-2xl font-semibold">Member W/L</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="member-wl-detail">
+                <h2 class="text-2xl font-semibold">Member W/L Detail</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="undone-member-wl">
+                <h2 class="text-2xl font-semibold">Undone Member W/L</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="product-report">
+                <h2 class="text-2xl font-semibold">Product Report</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="rebate-list">
+                <h2 class="text-2xl font-semibold">Rebate List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="summary-performance">
+                <h2 class="text-2xl font-semibold">Summary Performance</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="referral-list">
+                <h2 class="text-2xl font-semibold">Referral List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="otp-report">
+                <h2 class="text-2xl font-semibold">OTP Report</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="rebate-set">
+                <h2 class="text-2xl font-semibold">Rebate Set</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="promotion-group">
+                <h2 class="text-2xl font-semibold">Promotion Group</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="promotion-list">
+                <h2 class="text-2xl font-semibold">Promotion List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="cash-back-set">
+                <h2 class="text-2xl font-semibold">Cash Back Set</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="cash-back-send">
+                <h2 class="text-2xl font-semibold">Cash Back Send</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="cash-back-log">
+                <h2 class="text-2xl font-semibold">Cash Back Log</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="redpacket">
+                <h2 class="text-2xl font-semibold">RedPacket</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="redpacket-history">
+                <h2 class="text-2xl font-semibold">RedPacket History</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="reffpt-log-list">
+                <h2 class="text-2xl font-semibold">ReffPT Log List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="banner-list">
+                <h2 class="text-2xl font-semibold">Banner List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="customer-list">
+                <h2 class="text-2xl font-semibold">Customer List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="dp-wd-set">
+                <h2 class="text-2xl font-semibold">DP/WD Set</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="website-set">
+                <h2 class="text-2xl font-semibold">WebSite Set</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="web-info">
+                <h2 class="text-2xl font-semibold">Web Info</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="upload-image">
+                <h2 class="text-2xl font-semibold">Upload Image</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="menu-list">
+                <h2 class="text-2xl font-semibold">Menu List</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="member-ip-track">
+                <h2 class="text-2xl font-semibold">Member IP Track</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="home-image-set">
+                <h2 class="text-2xl font-semibold">Home Image Set</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="home-product">
+                <h2 class="text-2xl font-semibold">Home Product</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="main-seo-settings">
+                <h2 class="text-2xl font-semibold">Main Seo Settings</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="link-website">
+                <h2 class="text-2xl font-semibold">Link Website</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="withdraw-set">
+                <h2 class="text-2xl font-semibold">Withdraw Set</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="dp-amount-set">
+                <h2 class="text-2xl font-semibold">DP Amount Set</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
+            <div class="section" id="product">
+                <h2 class="text-2xl font-semibold">Product</h2>
+                <p class="text-gray-600 mb-4">Details about Bank Account Door...</p>
+                <img alt="Placeholder image of Bank Account Door section with door options" height="200" src="https://storage.googleapis.com/a1aa/image/tnxleLQ0EeoOh0xZbee1nsUr3O4f9qSccIbCGaEtOzigdiJeE.jpg" width="300" onclick="openModal(this.src)"/>
+                <!-- <video class="mt-4" controls>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4"/>
+                    Your browser does not support the video tag.
+                </video> -->
+            </div>
