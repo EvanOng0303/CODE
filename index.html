@@ -62,7 +62,7 @@
             background-color: rgba(0, 0, 0, 0.8);
         }
         .modal-content {
-            margin: 15% auto;
+            margin: 5% auto;
             display: block;
             width: 80%;
             max-width: 700px;
@@ -85,31 +85,37 @@
     </style>
 </head>
 <script>
-    function openModal(imageSrc) {
-        var modal = document.getElementById("modal");
-        var modalImage = document.getElementById("modal-image");
+function openModal(imageSrc) {
+    var modal = document.getElementById("modal");
+    var modalImage = document.getElementById("modal-image");
 
-        modal.style.display = "block"; // 显示模态框
-        modalImage.src = imageSrc;    // 设置模态框图片为点击的图片
+    modal.style.display = "block"; // 显示模态框
+    modalImage.src = imageSrc;    // 设置模态框图片为点击的图片
 
-        // 阻止事件冒泡以避免点击图片时关闭模态框
-        modalImage.addEventListener('click', function(event) {
-            event.stopPropagation();
-        });
+    // 禁用页面滚动
+    document.body.style.overflow = 'hidden';
+
+    // 阻止事件冒泡以避免点击图片时关闭模态框
+    modalImage.addEventListener('click', function(event) {
+        event.stopPropagation();
+    });
+}
+
+function closeModal() {
+    var modal = document.getElementById("modal");
+    modal.style.display = "none"; // 隐藏模态框
+
+    // 恢复页面滚动
+    document.body.style.overflow = 'auto';
+}
+
+// 点击模态框外部区域关闭模态框
+window.onclick = function(event) {
+    var modal = document.getElementById("modal");
+    if (event.target == modal) {
+        closeModal();
     }
-
-    function closeModal() {
-        var modal = document.getElementById("modal");
-        modal.style.display = "none"; // 隐藏模态框
-    }
-
-    // 点击模态框外部区域关闭模态框
-    window.onclick = function(event) {
-        var modal = document.getElementById("modal");
-        if (event.target == modal) {
-            closeModal();
-        }
-    }
+}
 </script>
 </body>
 
