@@ -1,10 +1,10 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -140,67 +140,33 @@
         }
     </style>
 </head>
-<script>
-    function isMobileDevice() {
-        return /Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('scrollToTopBtn');
-        if (isMobileDevice()) {
-            btn.style.display = 'flex'; // 移动设备显示
-        } else {
-            btn.style.display = 'none'; // 非移动设备隐藏
-        }
-    });
-
-    function scrollToTop() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // 平滑滚动效果
-        });
-    }
-
-    // 动态调整按钮位置
-    document.addEventListener('scroll', () => {
-        const btn = document.getElementById('scrollToTopBtn');
-        const scrolled = window.scrollY;
-        if (scrolled > 100) {
-            btn.style.bottom = '50px';
-        } else {
-            btn.style.bottom = '-60px';
-        }
-    });
-    
-function openModal(imageSrc) {
-    var modal = document.getElementById("modal");
-    var modalImage = document.getElementById("modal-image");
-
-    if (imageSrc) { // 确保 imageSrc 有效
-        modal.style.display = "flex"; // 显示模态框
-        modalImage.src = imageSrc;    // 加载图片到模态框
-        document.body.style.overflow = 'hidden'; // 禁用滚动
-    }
-}
-
-
-function closeModal() {
-    var modal = document.getElementById("modal");
-    modal.style.display = "none"; // 隐藏模态框
-
-    // 恢复页面滚动
-    document.body.style.overflow = 'auto';
-}
-
-// 点击模态框外部区域关闭模态框
-window.onclick = function(event) {
-    var modal = document.getElementById("modal");
-    if (event.target == modal) {
-        closeModal();
-    }
-}
-</script>
 <body>
+    <div class="container mx-auto p-6">
+        <!-- 自动上升按钮 -->
+        <button id="scrollToTopBtn" onclick="scrollToTop()">↑</button>
+    </div>
+
+    <script>
+        // 显示和隐藏“自动上升”按钮
+        document.addEventListener('scroll', () => {
+            const btn = document.getElementById('scrollToTopBtn');
+            const scrolled = window.scrollY;
+            if (scrolled > 200) {
+                btn.style.display = 'flex'; // 当滚动超过200px时显示按钮
+            } else {
+                btn.style.display = 'none'; // 否则隐藏按钮
+            }
+        });
+
+        // 平滑滚动到顶部
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth' // 平滑滚动效果
+            });
+        }
+    </script>
+</body>
     <div class="container mx-auto p-6">
         <h1 class="text-4xl font-bold text-center mb-6">Documentation</h1>
         <div class="section">
