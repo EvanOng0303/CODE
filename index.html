@@ -98,52 +98,30 @@
             cursor: pointer;
         }
         
-           #scrollToTopBtn {
-        position: fixed;
-        right: 10px;
-        bottom: 50px;
-        width: 50px;
-        height: 50px;
-        background-color: #4caf50;
-        color: white;
-        border: none;
-        border-radius: 50%;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-        transition: transform 0.3s, opacity 0.3s;
-        z-index: 1000;
-        opacity: 0.8;
-    }
+/* 自动上升按钮样式 */
+#scrollToTopBtn {
+    position: fixed;
+    right: 20px;
+    bottom: 60px;
+    width: 50px; 
+    height: 50px;
+    display: none; 
+    cursor: pointer;
+    z-index: 1000;
+    opacity: 0.8;
+    transition: transform 0.3s, opacity 0.3s;
+}
 
-    #scrollToTopBtn:hover {
-        transform: scale(1.1);
-        opacity: 1;
-    }
-
-    /* 默认隐藏按钮 */
-    #scrollToTopBtn {
-        display: none;
-    }
-
-        @media only screen and (max-width: 768px) {
-            #scrollToTopBtn {
-                display: flex;
-            }
-        }
-        @media only screen and (max-width: 768px) {
-            .content img, .content video {
-                max-width: 60%;
-            }
-        }
+#scrollToTopBtn:hover {
+    transform: scale(1.1);
+    opacity: 1;
+}
     </style>
 </head>
 <body>
     <div class="container mx-auto p-6">
         <!-- 自动上升按钮 -->
-        <button id="scrollToTopBtn" onclick="scrollToTop()">↑</button>
+           <img id="scrollToTopBtn" src="https://raw.githubusercontent.com/EvanOng0303/-/36b855b5cb31ea39e81c34e40a3bf659f9640848/%E4%B8%8A%E5%8D%87%E6%8C%89%E9%92%AE%20.png" alt="Scroll to top" onclick="scrollToTop()">
     </div>
 
     <script>
