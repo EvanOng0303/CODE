@@ -150,13 +150,40 @@
         const modalImage = document.getElementById('modal-image');
         modal.style.display = 'flex'; // 显示模态框
         modalImage.src = imageSrc; // 设置模态框中的图片源
+        
+        // 禁止页面滚动
+        document.body.style.overflow = 'hidden'; // 禁用滚动
     }
 
     // 关闭模态框
     function closeModal() {
         const modal = document.getElementById('modal');
         modal.style.display = 'none'; // 隐藏模态框
+        
+        // 恢复页面滚动
+        document.body.style.overflow = ''; // 恢复默认滚动
     }
+
+    // 在模态框上添加点击事件，点击模态框背景时关闭模态框
+    const modal = document.getElementById('modal');
+    
+    modal.addEventListener('click', function(event) {
+        // 如果点击的是模态框的背景区域（而不是图片），则关闭模态框
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // 关闭按钮的功能（点击 X 时关闭模态框）
+    const closeButton = document.querySelector('.close');
+    closeButton.addEventListener('click', closeModal);
+
+    // 确保点击图片时不会关闭模态框
+    const modalImage = document.getElementById('modal-image');
+    modalImage.addEventListener('click', function(event) {
+        // 阻止点击图片时冒泡到模态框背景
+        event.stopPropagation();
+    });
 </script>
 
 </body>
